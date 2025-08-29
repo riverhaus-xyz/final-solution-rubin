@@ -175,6 +175,9 @@
   <strong>Embed this animation:</strong><br>
   <code id="embedCode" style="user-select:all;cursor:pointer;"></code>
   <div style="font-size:0.97em;color:#888;margin-top:8px;">Copy and paste into Cargo.site or any webpage. This will embed only the moving animation.</div>
+  <div style="margin-top:18px;">
+    <iframe id="liveEmbedPreview" width="550" height="550" style="border:none;background:transparent;" allowtransparency="true"></iframe>
+  </div>
     </div>
   <script>
     // Update embed code dynamically
@@ -187,6 +190,10 @@
       const src = `https://riverhaus-xyz.github.io/final-solution-rubin/embed.html?w=${w}&h=${h}&bg=${encodeURIComponent(bg)}&fg=${encodeURIComponent(fg)}&bt=${bt}`;
       const code = `<iframe src="${src}" width="${w}" height="${h}" style="border:none;background:transparent;" allowtransparency="true"></iframe>`;
       document.getElementById('embedCode').textContent = code;
+      const livePreview = document.getElementById('liveEmbedPreview');
+      livePreview.width = w;
+      livePreview.height = h;
+      livePreview.src = src;
     }
     // Update on controls change
     document.getElementById('update').onclick = () => {
