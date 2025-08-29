@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zoomed Particle Animation</title>
+  <style>
+    body {
+      margin: 0;
+      background: #F0EEE6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    #controls {
+      margin-bottom: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    #animation {
+      border-radius: 12px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      background: #F0EEE6;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <label>Width: <input type="number" id="width" value="550" min="200" max="1200" step="10"></label>
+    <label>Height: <input type="number" id="height" value="550" min="200" max="1200" step="10"></label>
+    <label>Background: <input type="color" id="bgColor" value="#F0EEE6"></label>
+    <button id="update">Update</button>
+  </div>
+  <canvas id="animation" width="550" height="550"></canvas>
+  <script>
+    // --- Zoomed Particle Animation ---
+    const canvas = document.getElementById('animation');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width;
+    let height = canvas.height;
+    let bgColor = document.getElementById('bgColor').value;
+    let animationFrameId;
+    let time = 0;
+    // Particle system
+    const numParticles = 50;
+    const zoomLevel = 2.5;
+    const zoomOffsetX = width / 18;
+    const zoomOffsetY = height / 18 - 60;
+    const centerX = width / (2 * zoomLevel) + zoomOffsetX;
+    const centerY = height / (2 * zoomLevel) + zoomOffsetY;
+    const particles = [];
+    for (let i = 0; i < numParticles; i++) {
+      const angle = (i / numParticles) * Math.PI * 2;
+      const radius = Math.random() * 180 + 80;
+      const clusterChance = Math.random();
+      const clusterOffset = clusterChance < 0.2 ? 40 : (clusterChance > 0.8 ? -40 : 0);
+      particles.push({
+        x: centerX + Math.cos(angle) * (radius + clusterOffset),
+        y: centerY + Math.sin(angle) * (radius + clusterOffset),
+        speedX: (Math.random() - 0.5) * 0.05,
+        speedY: (Math.random() - 0.5) * 0.05,
+        size: Math.random() * 1.5 + 0.8,
+        connections: [],
+        noiseOffset: Math.random() * 1000,
+        idealSpace: 60 + Math.random() * 20,
+        allowClustering: clusterChance < 0.35
+      });
+    }
+    function animate() {
+      time += 0.0025;
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, width, height);
+      particles.forEach(p => p.connections = []);
+      // Find connections
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 180) {
+            let alpha = Math.min(0.24, 0.36 * (1 - distance / 180));
+            if (alpha > 0.001) {
+              particles[i].connections.push({ particle: particles[j], alpha });
+              particles[j].connections.push({ particle: particles[i], alpha });
+            }
+          }
+        }
+      }
+      // Update particles
+      particles.forEach(particle => {
+        const noiseScale = 0.001;
+        const noiseX = particle.x * noiseScale + particle.noiseOffset;
+        const noiseY = particle.y * noiseScale + particle.noiseOffset + 100;
+        const noiseVal = Math.sin(noiseX + time) * Math.cos(noiseY - time) + Math.sin(noiseX * 2 + time * 0.6) * Math.cos(noiseY * 2 - time * 0.6) * 0.3;
+        const noiseMultiplier = 0.00125;
+        particle.speedX += noiseVal * noiseMultiplier;
+        particle.speedY += noiseVal * noiseMultiplier;
+        particle.speedX *= 0.98;
+        particle.speedY *= 0.98;
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+        // Wrap
+        if (particle.x < 0) particle.x += width / zoomLevel;
+        if (particle.x > width / zoomLevel) particle.x -= width / zoomLevel;
+        if (particle.y < 0) particle.y += height / zoomLevel;
+        if (particle.y > height / zoomLevel) particle.y -= height / zoomLevel;
+      });
+      // Draw connections
+      ctx.save();
+      ctx.translate(-zoomOffsetX * zoomLevel, -zoomOffsetY * zoomLevel);
+      ctx.scale(zoomLevel, zoomLevel);
+      ctx.lineWidth = 1 / zoomLevel;
+      ctx.lineCap = 'round';
+      particles.forEach(particle => {
+        particle.connections.forEach(conn => {
+          ctx.strokeStyle = `rgba(0,0,0,${conn.alpha})`;
+          ctx.beginPath();
+          ctx.moveTo(particle.x, particle.y);
+          ctx.lineTo(conn.particle.x, conn.particle.y);
+          ctx.stroke();
+        });
+      });
+      // Draw particles
+      particles.forEach(particle => {
+        ctx.fillStyle = `rgba(0,0,0,0.5)`;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.restore();
+      animationFrameId = requestAnimationFrame(animate);
+    }
+    animate();
+    // Controls
+    document.getElementById('update').onclick = () => {
+      width = parseInt(document.getElementById('width').value, 10);
+      height = parseInt(document.getElementById('height').value, 10);
+      bgColor = document.getElementById('bgColor').value;
+      canvas.width = width;
+      canvas.height = height;
+    };
+  </script>
+</body>
+</html>
