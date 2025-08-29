@@ -195,25 +195,28 @@
       livePreview.height = h;
       livePreview.src = src;
     }
-    // Update on controls change
-    document.getElementById('update').onclick = () => {
-      width = parseInt(document.getElementById('width').value, 10);
-      height = parseInt(document.getElementById('height').value, 10);
-      bgColor = document.getElementById('bgColor').value;
-      figureColor = document.getElementById('figureColor').value;
-      bgTransparent = document.getElementById('bgTransparent').checked;
-      if (!/^#([0-9a-fA-F]{6})$/.test(bgColor)) {
-        bgColor = '#F0EEE6';
-        document.getElementById('bgColor').value = bgColor;
-      }
-      if (!/^#([0-9a-fA-F]{6})$/.test(figureColor)) {
-        figureColor = '#222222';
-        document.getElementById('figureColor').value = figureColor;
-      }
-      canvas.width = width;
-      canvas.height = height;
-      updateEmbedCode();
-    };
+    // Update on any input change
+    const controls = document.querySelectorAll('#controls input');
+    controls.forEach(input => {
+      input.addEventListener('input', () => {
+        width = parseInt(document.getElementById('width').value, 10);
+        height = parseInt(document.getElementById('height').value, 10);
+        bgColor = document.getElementById('bgColor').value;
+        figureColor = document.getElementById('figureColor').value;
+        bgTransparent = document.getElementById('bgTransparent').checked;
+        if (!/^#([0-9a-fA-F]{6})$/.test(bgColor)) {
+          bgColor = '#F0EEE6';
+          document.getElementById('bgColor').value = bgColor;
+        }
+        if (!/^#([0-9a-fA-F]{6})$/.test(figureColor)) {
+          figureColor = '#222222';
+          document.getElementById('figureColor').value = figureColor;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        updateEmbedCode();
+      });
+    });
     // Also update on page load
     updateEmbedCode();
     // --- Zoomed Particle Animation ---
