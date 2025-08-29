@@ -33,10 +33,6 @@
       box-shadow: 0 2px 12px rgba(0,0,0,0.04);
     }
     h1 {
-            font-size: 2.1rem;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            color: #222;
       font-size: 2.1rem;
       font-weight: 700;
       margin: 0 0 8px 0;
@@ -215,6 +211,7 @@
   <label><input type="checkbox" id="bgTransparent"> Transparent background</label>
   <label>Figure Color <input type="text" id="figureColor" value="#222222" maxlength="7" pattern="#?[0-9a-fA-F]{6}"></label>
   <button id="update">Update</button>
+  <button id="downloadImg" style="background:#444;color:#fff;border-radius:8px;padding:8px 22px;margin-left:10px;">Download Image</button>
         </div>
         <canvas id="animation" width="550" height="550"></canvas>
       </div>
@@ -356,6 +353,14 @@
       const b = parseInt(hex.substring(4,6), 16);
       return `rgba(${r},${g},${b},${alpha})`;
     }
+
+    // Download image button logic
+    document.getElementById('downloadImg').onclick = () => {
+      const link = document.createElement('a');
+      link.download = 'zoomed-particle-animation.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
   </script>
 </body>
 </html>
