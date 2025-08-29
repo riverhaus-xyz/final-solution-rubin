@@ -172,11 +172,43 @@
       </div>
     </div>
     <div class="embed-card">
-      <strong>Embed this animation:</strong><br>
-      <code>&lt;iframe src="https://riverhaus-xyz.github.io/final-solution-rubin/index.html" width="550" height="550" style="border:none;background:#F0EEE6;border-radius:14px;"&gt;&lt;/iframe&gt;</code>
-      <div style="font-size:0.97em;color:#888;margin-top:8px;">Copy and paste into Cargo.site or any webpage.</div>
+  <strong>Embed this animation:</strong><br>
+  <code id="embedCode" style="user-select:all;cursor:pointer;"></code>
+  <div style="font-size:0.97em;color:#888;margin-top:8px;">Copy and paste into Cargo.site or any webpage. This will embed only the moving animation.</div>
     </div>
   <script>
+    // Update embed code dynamically
+    function updateEmbedCode() {
+      const w = document.getElementById('width').value;
+      const h = document.getElementById('height').value;
+      const bg = document.getElementById('bgColor').value;
+      const fg = document.getElementById('figureColor').value;
+      const bt = document.getElementById('bgTransparent').checked ? '1' : '0';
+      const src = `https://riverhaus-xyz.github.io/final-solution-rubin/embed.html?w=${w}&h=${h}&bg=${encodeURIComponent(bg)}&fg=${encodeURIComponent(fg)}&bt=${bt}`;
+      const code = `<iframe src="${src}" width="${w}" height="${h}" style="border:none;background:transparent;" allowtransparency="true"></iframe>`;
+      document.getElementById('embedCode').textContent = code;
+    }
+    // Update on controls change
+    document.getElementById('update').onclick = () => {
+      width = parseInt(document.getElementById('width').value, 10);
+      height = parseInt(document.getElementById('height').value, 10);
+      bgColor = document.getElementById('bgColor').value;
+      figureColor = document.getElementById('figureColor').value;
+      bgTransparent = document.getElementById('bgTransparent').checked;
+      if (!/^#([0-9a-fA-F]{6})$/.test(bgColor)) {
+        bgColor = '#F0EEE6';
+        document.getElementById('bgColor').value = bgColor;
+      }
+      if (!/^#([0-9a-fA-F]{6})$/.test(figureColor)) {
+        figureColor = '#222222';
+        document.getElementById('figureColor').value = figureColor;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      updateEmbedCode();
+    };
+    // Also update on page load
+    updateEmbedCode();
     // --- Zoomed Particle Animation ---
     const canvas = document.getElementById('animation');
     const ctx = canvas.getContext('2d');
