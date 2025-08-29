@@ -4,77 +4,151 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zoomed Particle Animation</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
-      margin: 0;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
       background: #F0EEE6;
-      font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
       min-height: 100vh;
+      color: #222;
+    }
+    .main-card {
+      max-width: 540px;
+      margin: 40px auto 0 auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+      padding: 0 0 32px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .header-card {
+      background: linear-gradient(90deg,#f8f7f3 60%,#e7e3d7 100%);
+      border-radius: 18px 18px 0 0;
+      padding: 32px 32px 18px 32px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    h1 {
+            font-size: 2.1rem;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: #222;
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #222;
+      letter-spacing: -1px;
+    }
+    .subtitle {
+      font-size: 1.08rem;
+      color: #555;
+      margin-bottom: 0;
+    }
+    .controls-card {
+      background: #f8f7f3;
+      border-radius: 0 0 18px 18px;
+      padding: 24px 32px 18px 32px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-    }
-    header {
-      width: 100%;
-      background: #fff;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      padding: 32px 0 16px 0;
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    header h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      color: #222;
-      margin: 0 0 8px 0;
-      letter-spacing: -1px;
-    }
-    header p {
-      color: #555;
-      font-size: 1.1rem;
-      margin: 0;
     }
     #controls {
-      margin-bottom: 18px;
       display: flex;
       gap: 18px;
-      align-items: center;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.04);
-      padding: 12px 24px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     #controls label {
       font-size: 1rem;
       color: #333;
+      background: #fff;
+      border-radius: 8px;
+      padding: 8px 14px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     #controls input[type="number"] {
       width: 70px;
-      padding: 4px 6px;
-      border-radius: 4px;
-      border: 1px solid #ddd;
       font-size: 1rem;
-      margin-left: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      background: #f8f7f3;
+      margin-left: 6px;
     }
     #controls input[type="color"] {
-      margin-left: 4px;
+      width: 32px;
+      height: 32px;
       border: none;
-      background: none;
+      border-radius: 6px;
+      margin-left: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     }
-    #controls button {
-      background: #222;
+    #update {
+      font-size: 1rem;
+      font-weight: 600;
+      background: #2a7ae2;
       color: #fff;
       border: none;
-      border-radius: 4px;
-      padding: 6px 18px;
-      font-size: 1rem;
+      border-radius: 8px;
+      padding: 8px 22px;
+      box-shadow: 0 2px 8px rgba(42,122,226,0.08);
       cursor: pointer;
-      font-weight: 600;
       transition: background 0.2s;
     }
-    #controls button:hover {
+    #update:hover {
+      background: #1a5bb8;
+    }
+    #animation {
+      border-radius: 14px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+      background: #F0EEE6;
+      display: block;
+      margin: 0 auto 0 auto;
+      border: 1px solid #eee;
+      max-width: 100%;
+    }
+    .embed-card {
+      background: #f8f7f3;
+      border-radius: 12px;
+      padding: 18px 24px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      margin: 32px auto 0 auto;
+      text-align: center;
+      max-width: 540px;
+    }
+    .embed-card code {
+      background: #fff;
+      padding: 7px 14px;
+      border-radius: 8px;
+      display: inline-block;
+      font-size: 0.98em;
+      margin-top: 8px;
+    }
+    @media (max-width: 700px) {
+      .main-card, .embed-card {
+        max-width: 98vw;
+      }
+      .header-card, .controls-card {
+        padding: 16px 6vw 12px 6vw;
+      }
+      #animation {
+        width: 98vw !important;
+        height: 98vw !important;
+        max-width: 98vw;
+        max-height: 98vw;
+      }
+    }
+    </style>
       background: #444;
     }
     .art-container {
@@ -124,30 +198,41 @@
     <h1>Zoomed Particle Animation</h1>
     <p>A generative art piece inspired by <a href="https://www.thewayofcode.com/#56" target="_blank" style="color:#2a7ae2;text-decoration:none;">The Way of Code #56</a></p>
   </header>
-  <div class="info">
-    <strong>How to use:</strong> Adjust the controls below to change the size and background. You can embed this animation in Cargo.site or any webpage using an iframe.<br>
-    <span style="font-size:0.95em;color:#888;">For best results, use a light background and square dimensions.</span>
-  </div>
-  <div class="art-container">
-    <div id="controls">
-      <label>Width: <input type="number" id="width" value="550" min="200" max="1200" step="10"></label>
-      <label>Height: <input type="number" id="height" value="550" min="200" max="1200" step="10"></label>
-      <label>Background: <input type="color" id="bgColor" value="#F0EEE6"></label>
-      <button id="update">Update</button>
+    <div class="main-card">
+      <div class="header-card">
+        <h1>Zoomed Particle Animation</h1>
+        <div class="subtitle">Generative art inspired by <a href="https://www.thewayofcode.com/#56" target="_blank" style="color:#2a7ae2;text-decoration:none;font-weight:600;">The Way of Code #56</a></div>
+      </div>
+      <div class="controls-card">
+        <div style="font-size:1.04em;color:#444;margin-bottom:12px;text-align:center;">
+          <strong>How to use:</strong> Adjust the controls below to change the size and background.<br>
+          <span style="font-size:0.97em;color:#888;">For best results, use a light background and square dimensions.</span>
+        </div>
+        <div id="controls">
+  <label>Width <input type="number" id="width" value="550" min="200" max="1200" step="10"></label>
+  <label>Height <input type="number" id="height" value="550" min="200" max="1200" step="10"></label>
+  <label>Background Color <input type="text" id="bgColor" value="#F0EEE6" maxlength="7" pattern="#?[0-9a-fA-F]{6}"></label>
+  <label><input type="checkbox" id="bgTransparent"> Transparent background</label>
+  <label>Figure Color <input type="text" id="figureColor" value="#222222" maxlength="7" pattern="#?[0-9a-fA-F]{6}"></label>
+  <button id="update">Update</button>
+        </div>
+        <canvas id="animation" width="550" height="550"></canvas>
+      </div>
     </div>
-    <canvas id="animation" width="550" height="550"></canvas>
-  </div>
-  <div class="info" style="margin-bottom:0;">
-    <strong>Embed code:</strong><br>
-    <code style="background:#fff;padding:6px 12px;border-radius:6px;display:inline-block;font-size:0.95em;">&lt;iframe src="https://riverhaus-xyz.github.io/final-solution-rubin/index.html" width="550" height="550" style="border:none;background:#F0EEE6;border-radius:12px;"&gt;&lt;/iframe&gt;</code>
-  </div>
+    <div class="embed-card">
+      <strong>Embed this animation:</strong><br>
+      <code>&lt;iframe src="https://riverhaus-xyz.github.io/final-solution-rubin/index.html" width="550" height="550" style="border:none;background:#F0EEE6;border-radius:14px;"&gt;&lt;/iframe&gt;</code>
+      <div style="font-size:0.97em;color:#888;margin-top:8px;">Copy and paste into Cargo.site or any webpage.</div>
+    </div>
   <script>
     // --- Zoomed Particle Animation ---
     const canvas = document.getElementById('animation');
     const ctx = canvas.getContext('2d');
     let width = canvas.width;
     let height = canvas.height;
-    let bgColor = document.getElementById('bgColor').value;
+  let bgColor = document.getElementById('bgColor').value;
+  let figureColor = document.getElementById('figureColor').value;
+  let bgTransparent = document.getElementById('bgTransparent').checked;
     let animationFrameId;
     let time = 0;
     // Particle system
@@ -177,8 +262,12 @@
     }
     function animate() {
       time += 0.0025;
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, width, height);
+      if (!bgTransparent) {
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, width, height);
+      } else {
+        ctx.clearRect(0, 0, width, height);
+      }
       particles.forEach(p => p.connections = []);
       // Find connections
       for (let i = 0; i < particles.length; i++) {
@@ -222,7 +311,7 @@
       ctx.lineCap = 'round';
       particles.forEach(particle => {
         particle.connections.forEach(conn => {
-          ctx.strokeStyle = `rgba(0,0,0,${conn.alpha})`;
+          ctx.strokeStyle = hexToRgba(figureColor, conn.alpha);
           ctx.beginPath();
           ctx.moveTo(particle.x, particle.y);
           ctx.lineTo(conn.particle.x, conn.particle.y);
@@ -231,7 +320,7 @@
       });
       // Draw particles
       particles.forEach(particle => {
-        ctx.fillStyle = `rgba(0,0,0,0.5)`;
+        ctx.fillStyle = hexToRgba(figureColor, 0.5);
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fill();
@@ -245,9 +334,28 @@
       width = parseInt(document.getElementById('width').value, 10);
       height = parseInt(document.getElementById('height').value, 10);
       bgColor = document.getElementById('bgColor').value;
+      figureColor = document.getElementById('figureColor').value;
+      bgTransparent = document.getElementById('bgTransparent').checked;
+      if (!/^#([0-9a-fA-F]{6})$/.test(bgColor)) {
+        bgColor = '#F0EEE6';
+        document.getElementById('bgColor').value = bgColor;
+      }
+      if (!/^#([0-9a-fA-F]{6})$/.test(figureColor)) {
+        figureColor = '#222222';
+        document.getElementById('figureColor').value = figureColor;
+      }
       canvas.width = width;
       canvas.height = height;
     };
+    // Helper to convert hex to rgba
+    function hexToRgba(hex, alpha) {
+      hex = hex.replace('#', '');
+      if (hex.length !== 6) return `rgba(34,34,34,${alpha})`;
+      const r = parseInt(hex.substring(0,2), 16);
+      const g = parseInt(hex.substring(2,4), 16);
+      const b = parseInt(hex.substring(4,6), 16);
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
   </script>
 </body>
 </html>
